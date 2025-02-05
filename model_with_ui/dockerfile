@@ -1,0 +1,28 @@
+# Sử dụng image Python 3.9 làm base image
+FROM python:3.9-slim
+
+# Cài đặt các dependencies hệ thống cho PyQt5
+RUN apt-get update && apt-get install -y \
+    python3-pyqt5 \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Đặt thư mục làm việc trong container
+WORKDIR /app
+
+# Sao chép các tệp cần thiết vào container
+COPY giaodien.py ./giaodien.py
+
+# Cài đặt numpy phiên bản mới nhất trước
+RUN pip install --no-cache-dir numpy
+
+# Cài đặt các dependencies với phiên bản mới nhất
+RUN pip install --no-cache-dir \
+    pandas \
+    joblib \
+    PyQt5 \
+    scikit-learn
+
+# Chạy ứng dụng
+CMD ["python", "giaodien.py"]
